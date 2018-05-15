@@ -25,6 +25,7 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
 @property (nonatomic) BOOL _statusBarHidden;
 @property (nonatomic) BOOL _statusBarTextColorSchemeLight;
 @property (nonatomic, strong) NSDictionary *originalNavBarImages;
+@property (nonatomic, strong) NSDictionary *props;
 @property (nonatomic, strong) UIImageView *navBarHairlineImageView;
 @property (nonatomic, weak) id <UIGestureRecognizerDelegate> originalInteractivePopGestureDelegate;
 @end
@@ -142,6 +143,7 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
     [self commonInit:reactView navigatorStyle:navigatorStyle props:props];
     
     self.navigationController.interactivePopGestureRecognizer.delegate = self;
+    self.props = passProps;
     
     return self;
 }
@@ -157,7 +159,8 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
     if (!self) return nil;
     
     NSDictionary *modifiedPassProps = [self addCommandTypeAndTimestampIfExists:globalProps passProps:passProps];
-    
+    self.props = passProps;
+
     [self commonInit:reactView navigatorStyle:navigatorStyle props:modifiedPassProps];
     
     return self;
@@ -228,7 +231,8 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
              @"commandType": self.commandType ? self.commandType : @"",
              @"screen": screenName ? screenName : @"",
              @"startTime": self.timestamp ? self.timestamp : @"",
-             @"endTime": endTimestampStr ? endTimestampStr : @""
+             @"endTime": endTimestampStr ? endTimestampStr : @"",
+             @"props": self.props ? self.props : [[NSDictionary alloc] init],
          }];
         
         if (shouldReset) {
